@@ -1,0 +1,7 @@
+# macOS file
+.DS_Store
+appsettings.json
+
+# Ignore obj and bin directories
+obj/
+bin/
