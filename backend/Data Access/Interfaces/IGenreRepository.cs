@@ -1,7 +1,7 @@
 using backend.Models;
 
-namespace backend.Repositories
-{
+namespace backend.Repositories.Interfaces;
+
     public interface IGenreRepository
     {
         Task<IEnumerable<Genre>> GetAllGenresAsync();
@@ -10,4 +10,3 @@ namespace backend.Repositories
         Task<Genre> AddGenreAsync(Genre genre);
         Task<(bool Success, string Message)> DeleteGenreAsync(int genreId);
     }
-}

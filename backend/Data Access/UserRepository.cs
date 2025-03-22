@@ -1,8 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using backend.Models;
-using backend.Models.DTOs;
 using backend.Repositories.Interfaces;
-using System.Threading.Tasks;
 using backend.Data_Access;
 namespace backend.Repositories;
 
