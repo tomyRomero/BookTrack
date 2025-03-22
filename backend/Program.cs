@@ -1,5 +1,9 @@
 using backend.Data_Access;
 using backend.Models;
+using backend.Repositories;
+using backend.Repositories.Interfaces;
+using backend.Services;
+using backend.Services.Interfaces;
 using backend.Utilities;
 using backend.Utilities.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -39,6 +43,12 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 //Register dependencies
+
+builder.Services.AddScoped<IAuthService, AuthService>();
+
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+
 builder.Services.AddScoped<IHasher, Hasher>();
 
 // Configure application's DbContext to use SQL Server.
