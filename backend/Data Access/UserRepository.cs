@@ -48,5 +48,20 @@ public class UserRepository : IUserRepository
         }
     }
 
+    public async Task AddBookAsync(int userId, Book book)
+   {
+
+        var user = await _context.Users
+                .Include(u => u.Books) 
+                .FirstOrDefaultAsync(u => u.UserId == userId) ?? throw new KeyNotFoundException("User not found.");
+            
+            // Initialize Books if null
+            user.Books ??= new HashSet<Book>();
+
+            user.Books.Add(book); 
+
+            await _context.SaveChangesAsync();
+    }
+
 }
 
