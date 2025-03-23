@@ -27,12 +27,7 @@ namespace backend.Repositories
             return await _context.Ratings.FindAsync(ratingId);
         }
 
-        public async Task<List<Rating>> GetRatingsByBookAsync(int bookId)
-        {
-            return await _context.Ratings
-                                 .Where(r => r.BookId == bookId)
-                                 .ToListAsync();
-        }
+  
 
         public async Task<List<Rating>> GetRatingsByUserAsync(int userId)
         {
@@ -56,6 +51,13 @@ namespace backend.Repositories
             _context.Ratings.Remove(rating);
             await _context.SaveChangesAsync();
             return true;
+        }
+
+        public async Task<Rating?> GetRatingByBookIdAsync(int bookId)
+        {
+            return await _context.Ratings
+                                .Where(r => r.BookId == bookId)
+                                .FirstOrDefaultAsync();
         }
     }
 }

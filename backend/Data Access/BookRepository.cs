@@ -27,8 +27,10 @@ namespace backend.Repositories
         public async Task<Book?> GetBookByIdAsync(int bookId)
         {
             return await _context.Books
-                .Include(b => b.Genre)  // Include Genre data if needed
-                .Include(b => b.User)   // Include User data if needed
+                .Include(b => b.Genre) 
+                .Include(b => b.User) 
+                .Include(b => b.Reviews)
+                .Include(b => b.Ratings)
                 .FirstOrDefaultAsync(b => b.BookId == bookId);
         }
 
@@ -36,8 +38,10 @@ namespace backend.Repositories
         public async Task<List<Book>> GetAllBooksAsync()
         {
             return await _context.Books
-                .Include(b => b.Genre)  // Include Genre data if needed
-                .Include(b => b.User)   // Include User data if needed
+                .Include(b => b.Genre)  
+                .Include(b => b.User)
+                .Include(b => b.Reviews)
+                .Include(b => b.Ratings)
                 .ToListAsync();
         }
 
@@ -70,6 +74,28 @@ namespace backend.Repositories
             _context.Books.Remove(book);
             await _context.SaveChangesAsync();
             return true;
+        }
+
+        //Gather Books by User
+        public async Task<List<Book>> GetBooksByUserIdAsync(int userId)
+        {
+            return await _context.Books
+                .Where(b => b.UserId == userId) 
+                .Include(b => b.Reviews) 
+                .Include(b => b.Ratings) 
+                .Include(b => b.Genre) 
+                .ToListAsync();
+        }
+
+        //Gather Books not by User
+        public async Task<List<Book>> GetBooksNotByUserIdAsync(int userId)
+        {
+            return await _context.Books
+                .Where(b => b.UserId != userId) 
+                .Include(b => b.Reviews)
+                .Include(b => b.Ratings)
+                .Include(b => b.Genre)
+                .ToListAsync();
         }
 
         // Start a new transaction

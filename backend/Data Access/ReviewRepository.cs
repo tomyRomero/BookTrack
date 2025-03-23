@@ -27,13 +27,6 @@ namespace backend.Repositories
             return await _context.Reviews.FindAsync(reviewId);
         }
 
-        public async Task<List<Review>> GetReviewsByBookAsync(int bookId)
-        {
-            return await _context.Reviews
-                                 .Where(r => r.BookId == bookId)
-                                 .ToListAsync();
-        }
-
         public async Task<List<Review>> GetReviewsByUserAsync(int userId)
         {
             return await _context.Reviews
@@ -58,9 +51,12 @@ namespace backend.Repositories
             return true;
         }
 
-        public async Task<IDbContextTransaction> BeginTransactionAsync()
+        public async Task<Review?> GetReviewByBookIdAsync(int bookId)
         {
-                return await _context.Database.BeginTransactionAsync();
+            return await _context.Reviews
+                                .Where(r => r.BookId == bookId)
+                                .FirstOrDefaultAsync();
         }
+
     }
 }

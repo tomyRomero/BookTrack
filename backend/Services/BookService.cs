@@ -3,8 +3,6 @@ using backend.Models.DTOs;
 using backend.Repositories;
 using backend.Repositories.Interfaces;
 using backend.Services.Interfaces;
-using System;
-using System.Threading.Tasks;
 
 namespace backend.Services
 {
@@ -12,26 +10,26 @@ namespace backend.Services
     {
         private readonly IBookRepository _bookRepository;
         private readonly IGenreRepository _genreRepository;
-        private readonly IUserRepository _userRepository; // Added User repository for fetching the User
+        private readonly IUserRepository _userRepository; 
         private readonly IReviewRepository _reviewRepository;
         private readonly IRatingRepository _ratingRepository;
 
         public BookService(
             IBookRepository bookRepository, 
             IGenreRepository genreRepository,
-            IUserRepository userRepository, // Inject UserRepository
+            IUserRepository userRepository, 
             IReviewRepository reviewRepository,
             IRatingRepository ratingRepository)
         {
             _bookRepository = bookRepository;
             _genreRepository = genreRepository;
-            _userRepository = userRepository; // Store reference to UserRepository
+            _userRepository = userRepository; 
             _reviewRepository = reviewRepository;
             _ratingRepository = ratingRepository;
         }
 
         // Create a new book
-        public async Task<Book> CreateBookAsync(BookDTO bookDto)
+        public async Task<BookDTOResponse> CreateBookAsync(BookDTO bookDto)
         {
             Console.WriteLine("Starting CreateBookAsync method...");
 
@@ -105,11 +103,25 @@ namespace backend.Services
                     await CreateReviewAndRatingAsync(createdBook.BookId, bookDto.UserId, bookDto.ReviewContent, bookDto.RatingScore);
                     Console.WriteLine("Review and rating created successfully.");
 
+                     // Fetch the created review and rating
+                    var review = await _reviewRepository.GetReviewByBookIdAsync(createdBook.BookId);
+                    var rating = await _ratingRepository.GetRatingByBookIdAsync(createdBook.BookId);
+
                     // Commit the transaction after all operations
                     await transaction.CommitAsync();
                     Console.WriteLine("Transaction committed successfully.");
 
-                    return createdBook;
+                      return new BookDTOResponse
+                        {
+                            BookId = book.BookId,
+                            Title = book.Title,
+                            Author = book.Author,
+                            GenreId = book.GenreId,
+                            Genre = book.Genre.Name,
+                            UserId = book.UserId,
+                            ReviewContent = review?.Content ?? "No review available",
+                            RatingScore = rating?.Score ?? 0
+                        };
                 }
                 catch (Exception ex)
                 {
@@ -120,49 +132,44 @@ namespace backend.Services
                 }
             }
         }
+
+        //Create Review and Rating
         private async Task CreateReviewAndRatingAsync(int bookId, int userId, string reviewContent, int ratingScore)
         {
-            // Start a new transaction for the review and rating creation
-            using (var transaction = await _reviewRepository.BeginTransactionAsync())
+            Console.WriteLine("Inside CreateReviewAndRatingAsync...");
+
+            var review = new Review
             {
+                BookId = bookId,
+                UserId = userId,
+                Content = reviewContent
+            };
+
+            var rating = new Rating
+            {
+                BookId = bookId,
+                UserId = userId,
+                Score = ratingScore
+            };
+
+            Console.WriteLine("Saving review and rating...");
                 try
                 {
-                    // Create a new review
-                    var review = new Review
-                    {
-                        BookId = bookId,
-                        UserId = userId,
-                        Content = reviewContent
-                    };
-                    await _reviewRepository.CreateReviewAsync(review);
-
-                    // Create a new rating
-                    var rating = new Rating
-                    {
-                        BookId = bookId,
-                        UserId = userId,
-                        Score = ratingScore
-                    };
-                    await _ratingRepository.CreateRatingAsync(rating);
-
-                    // Commit the transaction after both review and rating creation
-                    await transaction.CommitAsync();
+                        await _reviewRepository.CreateReviewAsync(review);
+                        await _ratingRepository.CreateRatingAsync(rating);
+  
                 }
                 catch (Exception ex)
                 {
-                    // Rollback the transaction if any error occurs
-                    await transaction.RollbackAsync();
-                    throw new Exception("An unexpected error occurred while processing the transaction of CreateReviewAndRating", ex);
+                        throw new Exception("Error creating review and rating", ex);
                 }
-            }
         }
+        
 
         // Update review and rating for the book
         private async Task UpdateReviewAndRatingAsync(int bookId, int userId, string reviewContent, int ratingScore)
         {
-            // Start a new transaction for the review and rating update
-            using (var transaction = await _reviewRepository.BeginTransactionAsync())
-            {
+           
                 try
                 {
                     // Fetch the existing review for this user and book
@@ -209,17 +216,13 @@ namespace backend.Services
                         await _ratingRepository.UpdateRatingAsync(rating);
                     }
 
-                    // Commit the transaction after both review and rating operations
-                    await transaction.CommitAsync();
+                   
                 }
                 catch (Exception ex)
                 {
-                    // Rollback the transaction if any error occurs
-                    await transaction.RollbackAsync();
                     throw new Exception("An unexpected error occurred while processing the transaction of UpdateReviewAndRating", ex);
                 }
             }
-        }
 
     // Get a book by ID
     public async Task<Book?> GetBookByIdAsync(int bookId)
@@ -234,7 +237,7 @@ namespace backend.Services
     }
 
     // Update an existing book with review and rating
-    public async Task<Book?> UpdateBookAsync(int bookId, BookDTO bookDto)
+    public async Task<BookDTOResponse?> UpdateBookAsync(int bookId, BookDTO bookDto)
     {
     // Validate inputs
     if (string.IsNullOrWhiteSpace(bookDto.Title))
@@ -285,10 +288,24 @@ namespace backend.Services
             // Update or create the review and rating
             await UpdateReviewAndRatingAsync(updatedBook.BookId, bookDto.UserId, bookDto.ReviewContent, bookDto.RatingScore);
 
+            // Fetch the updated review and rating
+            var review = await _reviewRepository.GetReviewByBookIdAsync(updatedBook.BookId);
+            var rating = await _ratingRepository.GetRatingByBookIdAsync(updatedBook.BookId);
+
             // Commit the transaction after all operations
             await transaction.CommitAsync();
 
-            return updatedBook;
+            return new BookDTOResponse
+            {
+                            BookId = book.BookId,
+                            Title = book.Title,
+                            Author = book.Author,
+                            GenreId = book.GenreId,
+                            Genre = book.Genre.Name,
+                            UserId = book.UserId,
+                            ReviewContent = review?.Content ?? "No review available",
+                            RatingScore = rating?.Score ?? 0
+            };
         }
         catch (Exception ex)
                 {
@@ -300,9 +317,50 @@ namespace backend.Services
     }
 
         // Delete a book
-        public async Task<bool> DeleteBookAsync(int bookId)
-        {
+    public async Task<bool> DeleteBookAsync(int bookId)
+    {
             return await _bookRepository.DeleteBookAsync(bookId);
-        }
+    }
+
+    public async Task<List<BookDTOResponse>> GetBooksByUserAsync(int userId)
+    {
+        var books = await _bookRepository.GetBooksByUserIdAsync(userId);
+
+        // Map the books to BookDTOResponse
+        var bookDTOs = books.Select(b => new BookDTOResponse
+        {
+            BookId = b.BookId,
+            Title = b.Title,
+            Author = b.Author,
+            GenreId = b.GenreId,
+            UserId = b.UserId,
+            Genre = b.Genre.Name, 
+            ReviewContent = b.Reviews?.FirstOrDefault()?.Content ?? "No review available", 
+            RatingScore = b.Ratings?.FirstOrDefault()?.Score ?? 0 
+        }).ToList();
+
+        return bookDTOs;
+    }
+
+    public async Task<List<BookDTOResponse>> GetBooksNotByUserAsync(int userId)
+    {
+        var books = await _bookRepository.GetBooksNotByUserIdAsync(userId);
+
+        var bookDTOs = books.Select(b => new BookDTOResponse
+        {
+            BookId = b.BookId,
+            Title = b.Title,
+            Author = b.Author,
+            GenreId = b.GenreId,
+            UserId = b.UserId,
+            Genre = b.Genre.Name, 
+            ReviewContent = b.Reviews?.FirstOrDefault()?.Content ?? "No review available", 
+            RatingScore = b.Ratings?.FirstOrDefault()?.Score ?? 0 
+        }).ToList();
+
+        return bookDTOs;
+    }
+
+
     }
 }

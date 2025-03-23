@@ -11,5 +11,9 @@ namespace backend.Repositories.Interfaces
         Task<Book?> UpdateBookAsync(Book book);
         Task<bool> DeleteBookAsync(int bookId);
         Task<IDbContextTransaction> BeginTransactionAsync();
+        Task<List<Book>> GetBooksNotByUserIdAsync(int userId);
+        Task<List<Book>> GetBooksByUserIdAsync(int userId);
+
+        
     }
 }

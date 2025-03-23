@@ -36,11 +36,6 @@ namespace backend.Services
             return await _ratingRepository.CreateRatingAsync(rating);
         }
 
-        public async Task<List<Rating>> GetRatingsByBookAsync(int bookId)
-        {
-            return await _ratingRepository.GetRatingsByBookAsync(bookId);
-        }
-
         public async Task<List<Rating>> GetRatingsByUserAsync(int userId)
         {
             return await _ratingRepository.GetRatingsByUserAsync(userId);

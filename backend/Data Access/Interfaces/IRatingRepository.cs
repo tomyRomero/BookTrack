@@ -7,8 +7,8 @@ namespace backend.Repositories.Interfaces;
     {
         Task<Rating> CreateRatingAsync(Rating rating);
         Task<Rating?> GetRatingAsync(int ratingId);
-        Task<List<Rating>> GetRatingsByBookAsync(int bookId);
         Task<List<Rating>> GetRatingsByUserAsync(int userId);
         Task<Rating> UpdateRatingAsync(Rating rating);
         Task<bool> DeleteRatingAsync(int ratingId);
+        Task<Rating?> GetRatingByBookIdAsync(int bookId);
     }

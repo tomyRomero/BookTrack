@@ -35,10 +35,6 @@ namespace backend.Services
             return await _reviewRepository.CreateReviewAsync(review);
         }
 
-        public async Task<List<Review>> GetReviewsByBookAsync(int bookId)
-        {
-            return await _reviewRepository.GetReviewsByBookAsync(bookId);
-        }
 
         public async Task<List<Review>> GetReviewsByUserAsync(int userId)
         {
