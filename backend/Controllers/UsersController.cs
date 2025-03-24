@@ -4,6 +4,7 @@ using backend.Services;
 using backend.Services.Interfaces;
 using backend.Models.DTOs;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace backend.Controllers;
 
@@ -42,6 +43,7 @@ public class UsersController : ControllerBase
 
     // GET: api/users/{id}
     [HttpGet("{id}")]
+    [Authorize]
     public async Task<IActionResult> GetUserById(int id)
     {
         //Get user by ID logic

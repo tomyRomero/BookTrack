@@ -37,13 +37,13 @@ namespace backend.Services
             if (string.IsNullOrWhiteSpace(bookDto.Title))
             {
                 Console.WriteLine("Validation failed: Title is missing.");
-                throw new Exception("Title is required.");
+                throw new ArgumentException("Title is required.");
             }
 
             if (string.IsNullOrWhiteSpace(bookDto.Author))
             {
                 Console.WriteLine("Validation failed: Author is missing.");
-                throw new Exception("Author is required.");
+                throw new ArgumentException("Author is required.");
             }
 
             // Check if RatingScore is between 1 and 5

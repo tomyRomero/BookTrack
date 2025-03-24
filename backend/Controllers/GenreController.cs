@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using backend.Models.DTOs;
 using backend.Services.Interfaces;
 using System;
+using Microsoft.AspNetCore.Authorization;
 
 namespace backend.Controllers
 {
@@ -23,6 +24,7 @@ namespace backend.Controllers
             try
             {
                 var genres = await _genreService.GetAllGenresAsync();
+
                 return Ok(genres);
             }
             catch (Exception ex)
@@ -54,6 +56,7 @@ namespace backend.Controllers
 
         // POST: api/genre
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> AddGenre([FromBody] GenreDTO genreDTO)
         {
             if (!ModelState.IsValid)

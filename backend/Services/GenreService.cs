@@ -16,12 +16,12 @@ namespace backend.Services
             _genreRepository = genreRepository;
         }
 
-        public async Task<IEnumerable<GenreDTO>> GetAllGenresAsync()
+        public async Task<IEnumerable<GenreResponseDTO>> GetAllGenresAsync()
         {
             try
             {
                 var genres = await _genreRepository.GetAllGenresAsync();
-                return genres.Select(g => new GenreDTO { Name = g.Name }).ToList();
+                return genres.Select(g => new GenreResponseDTO { Name = g.Name, GenreId = g.GenreId }).ToList();
             }
             catch (Exception ex)
             {

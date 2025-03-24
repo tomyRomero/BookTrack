@@ -5,7 +5,7 @@ namespace backend.Services.Interfaces
 {
     public interface IGenreService
     {
-        Task<IEnumerable<GenreDTO>> GetAllGenresAsync();
+        Task<IEnumerable<GenreResponseDTO>> GetAllGenresAsync();
         Task<GenreDTO?> GetGenreByIdAsync(int genreId);
         Task<GenreResponseDTO?> AddGenreAsync(GenreDTO genreDTO);
         Task<GenreResponseDTO?> UpdateGenreAsync(int genreId, GenreDTO genreDTO);

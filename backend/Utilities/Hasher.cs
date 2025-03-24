@@ -117,7 +117,8 @@ public class Hasher : IHasher
             // Set the claims for the token, including the username as a claim
             Subject = new ClaimsIdentity(new[]
             {
-                new Claim(ClaimTypes.Name, user.Username),
+                new Claim(ClaimTypes.Name, user.UserId.ToString()),
+                new Claim("Username",user.Username) 
             }),
 
             // Set the expiration time for the token
