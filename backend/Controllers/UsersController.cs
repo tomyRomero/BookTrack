@@ -36,7 +36,8 @@ public class UsersController : ControllerBase
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                Console.WriteLine($"Error during registration: {ex.Message}");
+                return BadRequest(new { message = "Registration failed", details = ex.Message });
             }
     }
 

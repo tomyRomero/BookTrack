@@ -28,7 +28,9 @@ const SignUpPage = () => {
         toast.success('Registration successful! Please log in.');
         navigate('/login'); 
       } else {
-        toast.error(data.message || 'Registration failed.');
+        const errorMessage = data?.message || 'Registration failed.';
+        const errorDetails = data?.details || '';
+        toast.error(`${errorMessage}: ${errorDetails}`);
       }
     } catch (error) {
       toast.error('An error occurred. Please try again later.');
@@ -41,7 +43,6 @@ const SignUpPage = () => {
         <h1 className="text-4xl font-bold text-gray-800 mb-6">Sign Up</h1>
 
         <form onSubmit={handleSignUp} className="space-y-4">
-          {/* Username */}
           <input
             type="text"
             placeholder="Username"
@@ -51,7 +52,6 @@ const SignUpPage = () => {
             required
           />
 
-          {/* Password */}
           <input
             type="password"
             placeholder="Password"
@@ -61,7 +61,6 @@ const SignUpPage = () => {
             required
           />
 
-          {/* Submit Button */}
           <button
             type="submit"
             className="w-full bg-teal-600 text-white px-6 py-3 rounded-md text-xl font-semibold hover:bg-teal-700 transition duration-300 cursor-pointer"

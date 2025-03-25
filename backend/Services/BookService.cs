@@ -225,9 +225,24 @@ namespace backend.Services
             }
 
     // Get a book by ID
-    public async Task<Book?> GetBookByIdAsync(int bookId)
+    public async Task<BookDTOResponse?> GetBookByIdAsync(int bookId)
     {
-            return await _bookRepository.GetBookByIdAsync(bookId);
+        var book = await _bookRepository.GetBookByIdAsync(bookId);
+
+        if (book == null)
+            return null;
+
+        return new BookDTOResponse
+        {
+            BookId = book.BookId,
+            Title = book.Title,
+            Author = book.Author,
+            GenreId = book.GenreId,
+            UserId = book.UserId,
+            Genre = book.Genre?.Name ?? "Unknown Genre", // Handle null genre
+            ReviewContent = book.Reviews?.FirstOrDefault()?.Content ?? "No review available",
+            RatingScore = book.Ratings?.FirstOrDefault()?.Score ?? 0
+        };
     }
 
     // Get all books
@@ -334,6 +349,7 @@ namespace backend.Services
             Author = b.Author,
             GenreId = b.GenreId,
             UserId = b.UserId,
+            Username = b.User.Username,
             Genre = b.Genre.Name, 
             ReviewContent = b.Reviews?.FirstOrDefault()?.Content ?? "No review available", 
             RatingScore = b.Ratings?.FirstOrDefault()?.Score ?? 0 
@@ -353,6 +369,7 @@ namespace backend.Services
             Author = b.Author,
             GenreId = b.GenreId,
             UserId = b.UserId,
+            Username = b.User.Username,
             Genre = b.Genre.Name, 
             ReviewContent = b.Reviews?.FirstOrDefault()?.Content ?? "No review available", 
             RatingScore = b.Ratings?.FirstOrDefault()?.Score ?? 0 

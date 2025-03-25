@@ -6,7 +6,7 @@ namespace backend.Services.Interfaces
     public interface IBookService
     {
         Task<BookDTOResponse> CreateBookAsync(BookDTO bookDto);
-        Task<Book?> GetBookByIdAsync(int bookId);
+        Task<BookDTOResponse?> GetBookByIdAsync(int bookId);
         Task<List<Book>> GetAllBooksAsync();
         Task<BookDTOResponse?> UpdateBookAsync(int bookId, BookDTO bookDto);
         Task<bool> DeleteBookAsync(int bookId);

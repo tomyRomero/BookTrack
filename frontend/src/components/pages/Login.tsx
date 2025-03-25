@@ -27,12 +27,10 @@ const LoginPage = () => {
         throw new Error('Login failed. Please check your username and password.');
       }
 
-      // Parse the JSON response
       const data = await response.json();
 
-      // Check if the JWT token exists in the response
       if (data.token) {
-        // Dispatch LOGIN action to update global state
+
         dispatch({ type: 'LOGIN', payload: data.token });
 
         toast.success('Login successful!');
@@ -51,7 +49,6 @@ const LoginPage = () => {
         <h1 className="text-4xl font-bold text-gray-800 mb-6">Login</h1>
 
         <form onSubmit={handleLogin} className="space-y-4">
-          {/* Username */}
           <input
             type="text"
             placeholder="Username"
@@ -61,7 +58,6 @@ const LoginPage = () => {
             required
           />
 
-          {/* Password */}
           <input
             type="password"
             placeholder="Password"
@@ -71,7 +67,6 @@ const LoginPage = () => {
             required
           />
 
-          {/* Submit Button */}
           <button
             type="submit"
             className="w-full bg-teal-600 text-white px-6 py-3 rounded-md text-xl font-semibold hover:bg-teal-700 transition duration-300 cursor-pointer"

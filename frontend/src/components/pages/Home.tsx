@@ -26,7 +26,7 @@ const Home = () => {
           {/* Login Button */}
           <button
             onClick={handleLogin}
-            className="bg-blue-600 text-white px-6 py-3 rounded-md text-xl font-semibold hover:bg-blue-700 transition duration-300"
+            className="bg-blue-600 text-white px-6 py-3 rounded-md text-xl font-semibold hover:bg-blue-700 transition duration-300 cursor-pointer"
           >
             Login
           </button>
@@ -34,7 +34,7 @@ const Home = () => {
           {/* Sign Up Button */}
           <button
             onClick={handleSignup}
-            className="bg-teal-600 text-white px-6 py-3 rounded-md text-xl font-semibold hover:bg-teal-700 transition duration-300"
+            className="bg-teal-600 text-white px-6 py-3 rounded-md text-xl font-semibold hover:bg-teal-700 transition duration-300 cursor-pointer"
           >
             Sign Up
           </button>

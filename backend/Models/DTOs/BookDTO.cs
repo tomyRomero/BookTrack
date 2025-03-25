@@ -16,5 +16,7 @@ namespace backend.Models.DTOs
         public int BookId { get; set; }
 
         public string? Genre { get; set; }
+
+        public string? Username { get; set; }
     }
 }

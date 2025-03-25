@@ -53,6 +53,7 @@ namespace backend.Controllers
             {
                 return NotFound(new { message = "Book not found." });
             }
+            
             return Ok(book);
         }
 
@@ -156,8 +157,6 @@ namespace backend.Controllers
             {
                 return NotFound(new { message = "No books found that do not belong to this user." });
             }
-
-            
 
             // Return the list of BookDTOResponse as a 200 OK response
             return Ok(books);

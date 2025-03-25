@@ -81,6 +81,7 @@ namespace backend.Repositories
         {
             return await _context.Books
                 .Where(b => b.UserId == userId) 
+                .Include(b => b.User)
                 .Include(b => b.Reviews) 
                 .Include(b => b.Ratings) 
                 .Include(b => b.Genre) 
@@ -92,6 +93,7 @@ namespace backend.Repositories
         {
             return await _context.Books
                 .Where(b => b.UserId != userId) 
+                .Include(b => b.User)
                 .Include(b => b.Reviews)
                 .Include(b => b.Ratings)
                 .Include(b => b.Genre)

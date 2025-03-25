@@ -7,6 +7,8 @@ import SignUpPage from "./components/pages/Signup";
 import { AuthProvider } from "./Auth";
 import { ToastContainer } from "react-toastify";
 import Feed from "./components/pages/Feed";
+import CreateBookPage from "./components/pages/Createbook";
+import UpdateBookPage from "./components/pages/Updatebook";
 
 function App() {
   return (
@@ -19,6 +21,8 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/feed" element={<Feed />} />
+          <Route path="/create" element={<CreateBookPage />} />
+          <Route path="/update/:bookId" element={<UpdateBookPage />} />
         </Route>
       </Routes>
     </Router>
