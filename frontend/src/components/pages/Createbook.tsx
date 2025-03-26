@@ -67,7 +67,6 @@ const CreateBookPage = () => {
       <div className="border border-black text-center bg-white p-10 rounded-lg shadow-xl w-full max-w-md">
         <h1 className="text-4xl font-bold text-gray-800 mb-6">Create Book</h1>
 
-        {/* Back Button */}
         <button
           onClick={() => navigate('/feed')}
           className="text-teal-600 hover:underline mb-4 cursor-pointer"
@@ -94,7 +93,6 @@ const CreateBookPage = () => {
             required
           />
 
-          {/* Genre Dropdown */}
           <select
             value={genreId}
             onChange={(e) => setGenreId(Number(e.target.value))}
@@ -108,16 +106,15 @@ const CreateBookPage = () => {
             ))}
           </select>
 
-          {/* Review Content */}
           <textarea
             placeholder="Review Content"
             value={reviewContent}
             onChange={(e) => setReviewContent(e.target.value)}
             className="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500"
             rows={4}
+            required
           />
 
-          {/* Rating Score */}
           <input
             type="number"
             placeholder="Rating Score"
@@ -126,6 +123,7 @@ const CreateBookPage = () => {
             min="1"
             max="5"
             className="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500"
+            required
           />
 
           <button

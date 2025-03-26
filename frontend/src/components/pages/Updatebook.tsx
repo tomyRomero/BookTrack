@@ -128,6 +128,7 @@ const UpdateBookPage = () => {
             onChange={(e) => setReviewContent(e.target.value)}
             className="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500"
             rows={4}
+            required
           />
           <input
             type="number"
@@ -137,6 +138,7 @@ const UpdateBookPage = () => {
             min="1"
             max="5"
             className="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500"
+            required
           />
           <button
             type="submit"
